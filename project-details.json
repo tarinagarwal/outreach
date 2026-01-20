@@ -1,0 +1,143 @@
+{
+  "id": "2",
+  "slug": "outreach-agent",
+  "name": "Outreach Agent",
+  "shortDescription": "AI-powered automated personalized email outreach system - Full Flask application + n8n workflow template available",
+  "description": "Outreach Agent is an intelligent email outreach automation system that generates and sends personalized emails at scale. It uses AI to create compelling, customized outreach emails based on company data from Google Sheets and a knowledge base from Google Docs. The solution is available in two formats: (1) A full-featured Flask web application with a modern Tailwind CSS interface, real-time workflow execution, connection testing, and comprehensive API endpoints, and (2) An n8n workflow template that can be easily imported and customized for automation platforms. Both versions offer the same core functionality - fetching company data, validating emails, generating personalized content using OpenAI, and sending emails via SMTP - allowing you to choose the deployment method that best fits your needs.",
+  "category": "Productivity",
+  "rating": 4.9,
+  "tags": ["Email Automation", "AI", "Outreach", "Flask", "Google Sheets", "Google Docs", "SMTP", "n8n", "OpenAI", "Personalization"],
+  "pricingType": "Freemium",
+  "trending": true,
+  "featured": true,
+  "showPricing": false,
+  "isOneTimePricing": true,
+  "provider": "AI Kaptan",
+  "platform": "Web, n8n",
+  "thumbnail": {
+    "url": "/products/outreach-agent/image1.png",
+    "alt": "Outreach Agent - Main Product Image",
+    "caption": "Outreach Agent Dashboard"
+  },
+  "images": [
+    {
+      "url": "/products/outreach-agent/image1.png",
+      "alt": "Outreach Agent Dashboard",
+      "caption": "Main dashboard interface showing configuration and workflow execution"
+    }
+  ],
+  "reviewCount": 1240,
+  "detailedDescription": "Outreach Agent revolutionizes how you conduct email outreach campaigns by automating the entire process from data fetching to email delivery. It seamlessly integrates with Google Sheets to fetch company data, uses Google Docs as a knowledge base for personalization, leverages OpenAI GPT models to generate compelling personalized emails, and sends them via SMTP. The system processes rows in batches, validates email addresses, generates unique subject lines and email bodies tailored to each recipient, and tracks execution results. The solution is available in two formats: (1) A full-featured Flask web application with a beautiful Tailwind CSS interface, real-time workflow execution, connection testing for all services (Google Sheets, Google Docs, OpenAI, SMTP), configuration management, test email functionality, and comprehensive REST API endpoints, and (2) An n8n workflow template that can be easily imported and customized for automation platforms with the same core functionality. Both versions support OAuth and service account authentication for Google services, multiple OpenAI model selection, and flexible SMTP configuration.",
+  "keyFeatures": [
+    "AI-powered email generation using OpenAI GPT models (GPT-4o, GPT-4o-mini, GPT-4 Turbo, GPT-3.5 Turbo)",
+    "Google Sheets integration for fetching company data by row index",
+    "Google Docs integration as knowledge base for email personalization",
+    "Automatic email validation (checks for valid email format and non-empty fields)",
+    "Personalized subject line generation with multiple pattern variations",
+    "HTML email body generation with industry-specific pain points",
+    "SMTP email sending with support for Gmail and custom SMTP servers",
+    "Modern, responsive web interface with Tailwind CSS",
+    "Real-time workflow execution with progress tracking",
+    "Connection testing for all integrated services",
+    "Batch processing with configurable row ranges",
+    "Detailed execution results (sent, processed, skipped, errors)",
+    "Test email functionality for validation",
+    "Configuration management through web interface",
+    "REST API endpoints for integration",
+    "Full Flask application with modular service architecture",
+    "n8n workflow template with structured output parsing",
+    "Support for OAuth and service account authentication",
+    "Error handling and logging throughout the workflow"
+  ],
+  "pricingPlans": [
+    {
+      "name": "Starter",
+      "price": "$199",
+      "features": [
+        "Basic email outreach automation",
+        "Google Sheets & Docs integration",
+        "AI email generation",
+        "SMTP email sending",
+        "Web dashboard interface",
+        "Connection testing",
+        "Access to n8n workflow template",
+        "Lifetime access"
+      ]
+    },
+    {
+      "name": "Pro",
+      "price": "$499",
+      "features": [
+        "Unlimited email outreach",
+        "Advanced AI personalization",
+        "Multiple OpenAI model support",
+        "Batch processing",
+        "Detailed execution tracking",
+        "Test email functionality",
+        "API access",
+        "Full Flask application + n8n workflow",
+        "Priority support",
+        "Lifetime access"
+      ],
+      "popular": true
+    },
+    {
+      "name": "Enterprise",
+      "price": "Custom",
+      "features": [
+        "Everything in Pro",
+        "Custom integrations",
+        "Multiple Google Sheets sources",
+        "Advanced analytics and reporting",
+        "Custom AI prompt templates",
+        "Dedicated support",
+        "On-premise deployment",
+        "Full application + n8n workflow included",
+        "Lifetime access"
+      ]
+    }
+  ],
+  "faqs": [
+    {
+      "question": "What makes Outreach Agent different from other email outreach tools?",
+      "answer": "Outreach Agent uses advanced AI to generate truly personalized emails based on company data and a knowledge base, rather than using simple templates. It automatically fetches company information from Google Sheets, uses your knowledge base from Google Docs to create industry-specific content, and generates unique subject lines and email bodies for each recipient. Additionally, it's available both as a full Flask web application and as an n8n workflow, giving you flexibility in deployment."
+    },
+    {
+      "question": "How does the AI email generation work?",
+      "answer": "The system uses OpenAI GPT models to generate personalized emails. It takes company data from Google Sheets (including company name, industry, contact name, etc.), combines it with your knowledge base from Google Docs (which contains industry-specific pain points and information), and generates a unique email with a personalized subject line and HTML body tailored to each recipient."
+    },
+    {
+      "question": "Can I customize the email templates and prompts?",
+      "answer": "Yes, you can customize the AI prompt template in the outreach_agent.py file (for Flask) or modify the prompt in the n8n workflow. The system uses a detailed prompt that includes instructions for subject line patterns and email body structure. You can also modify the knowledge base in Google Docs to change the content used for personalization."
+    },
+    {
+      "question": "What's the difference between the Flask application and n8n workflow?",
+      "answer": "The Flask application is a full-featured web application with a modern UI, real-time execution tracking, connection testing, configuration management, and REST API endpoints. The n8n workflow is a no-code automation solution that can be imported into n8n and customized. Both offer the same core functionality - choose based on your preferred deployment method and technical expertise."
+    },
+    {
+      "question": "How do I set up Google Sheets and Google Docs integration?",
+      "answer": "You have two options: (1) OAuth Flow - Create OAuth 2.0 credentials in Google Cloud Console, download the credentials JSON, and run a one-time OAuth flow to generate token.json, or (2) Service Account - Create a service account, download the service account JSON key, share your Google Sheets and Docs with the service account email, and set GOOGLE_CREDENTIALS_JSON in your .env file."
+    },
+    {
+      "question": "What SMTP servers are supported?",
+      "answer": "Outreach Agent supports any SMTP server, including Gmail, Outlook, and custom SMTP servers. For Gmail, you'll need to use an App Password instead of your regular password. The system supports standard SMTP configurations (host, port, username, password) and can work with any SMTP server that supports TLS/STARTTLS."
+    },
+    {
+      "question": "How does email validation work?",
+      "answer": "The system automatically validates each email address before processing. It checks that the 'email_to_use' field exists, is not empty, and contains the '@' symbol. If validation fails, the row is skipped and logged in the execution results."
+    },
+    {
+      "question": "Can I process multiple rows at once?",
+      "answer": "Yes, you can specify a start row and end row range in the web interface or API. The system will process all rows in that range sequentially, fetching company data, generating personalized emails, and sending them. You can monitor the progress and see detailed results including how many emails were sent, skipped, or had errors."
+    },
+    {
+      "question": "Does Outreach Agent support scheduling or automation?",
+      "answer": "The Flask application can be scheduled using cron jobs or task schedulers to run the workflow automatically. The n8n workflow version can be scheduled directly within n8n using its built-in scheduling features. Both versions support automation through their respective platforms."
+    },
+    {
+      "question": "What happens if an email fails to send?",
+      "answer": "If an email fails to send, the error is logged and included in the execution results. The system continues processing other rows, so one failure doesn't stop the entire workflow. You can review the errors in the results dashboard to identify and fix any issues."
+    }
+  ]
+}
+

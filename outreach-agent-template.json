@@ -1,0 +1,506 @@
+{
+  "name": "outreach-agent-template",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        144,
+        480
+      ],
+      "id": "279f0f0a-0a55-4442-98e0-bb9df63bb72e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an automation outreach agent.\nFollow all instructions EXACTLY.\n\nDo NOT explain, do NOT summarize, and do NOT ask questions.\nYour ONLY job is to output the required JSON fields. Nothing else.\n\n────────────────────────────────────────\nCOMPANY DATA (JSON INPUT)\n\nUse this company row EXACTLY as provided:\n\n{{ JSON.stringify($json, null, 2) }}\n\nThis JSON contains the target company details, including the field:\n\"email_to_use\"\n\n────────────────────────────────────────\nSTEP 1 — Fetch Our Company's Knowledgebase\n\nCall the tool:\n→ \"Get a document in Google Docs\"\n\nReturn the raw tool output EXACTLY as received.\n\nUse ONLY:\n• Our Company's Knowledgebase\n• The provided company row\n\nto generate the outreach email.\n\n────────────────────────────────────────\nSTEP 2 — Generate Outreach Email Content\n\nYou MUST generate:\n\n1. **to**\n   - Must be the EXACT value of \"email_to_use\" from the input JSON.\n\n2. **subject**\n   - A unique, compelling subject line.\n   - Personalized to the individual or company.\n   - Must be a rewritten variation of ONE of these patterns:\n        • Quick idea for {CompanyName}\n        • {Name}, spotted something you can automate\n        • Boosting {Industry} performance at {CompanyName}\n        • A smarter way to cut costs at {CompanyName}\n        • {Name}, this can save your team 10–20 hrs/week\n\n3. **emailBody**\n   - A polished, professional HTML outreach email.\n   - Use this as inspiration:\n\nHi {FirstName},\n\nI came across {CompanyName} and noticed the work you're doing in the {Industry} space.\nI also noticed a few areas on your website where automation can dramatically improve efficiency and reduce workload.\n\nBased on what companies in {Industry} typically struggle with, here are several areas we can automate immediately:\n• Provide 3–6 customized, industry-specific pain points  \n  (strictly derived from the our Company's Knowledgebase)\n\nThis is exactly what we do at our company.\nWe build done-for-you automation systems using:\nAI Voice Agents, Chat & Email Automation, n8n workflows, CRM integrations, and smart data processing tools — reducing operational time & costs by 70–90%.\n\nTo help you identify hidden inefficiencies, we're offering a free 1:1 Automation Consultation.\nWe'll personally review your systems at {CompanyName}, map where you're losing time and money, and show you how to automate everything step-by-step.\n\nIf you're open to it, reply “Yes” and I’ll send available times for a quick call.\n\nDo NOT add any signature, sign-off, closing line, name, or regards.\nEnd the email immediately after the final sentence.\n\n────────────────────────────────────────\nSTEP 3 — OUTPUT FORMAT (STRICT)\n\nYour final output MUST be a valid JSON object that EXACTLY matches this structure:\n\n{\n  \"to\": \"<email_to_use>\",\n  \"subject\": \"<generated subject>\",\n  \"emailBody\": \"<generated HTML email>\"\n}\n\nRULES (VERY IMPORTANT):\n• Do NOT wrap the JSON in quotes.\n• Do NOT escape characters.\n• Do NOT add backticks.\n• Do NOT add extra keys.\n• Do NOT output anything before or after the JSON object.\n• Output ONLY the JSON object.\n\n────────────────────────────────────────\nGLOBAL RULES (STRICT)\n\n• Use ONLY \"email_to_use\" as the recipient field.\n• Never mention validation logic.\n• Never mention tools or automation steps.\n• Never modify Our Company's Knowledgebase.\n• Output ONLY:\n    - to  \n    - subject  \n    - emailBody\n",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2192,
+        480
+      ],
+      "id": "8608feb9-56c1-47ab-9eb6-d22ebe4fc54a",
+      "name": "AI Agent",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1952,
+        736
+      ],
+      "id": "d12cd604-c437-42dc-aed6-a801942bdedb",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const start = Number($input.first().json.startRow + 1);\nconst end = Number($input.first().json.endRow + 1);\n\nconst output = [];\n\nfor (let i = start; i <= end; i++) {\n  output.push({ index: i });\n}\n\nreturn output;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        800,
+        480
+      ],
+      "id": "d87f3840-0810-424c-b8a1-8e04af73e7d4",
+      "name": "Create array list"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"to\": { \"type\": \"string\" },\n    \"subject\": { \"type\": \"string\" },\n    \"emailBody\": { \"type\": \"string\" }\n  },\n  \"required\": [\"to\", \"subject\", \"emailBody\"],\n  \"additionalProperties\": false\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2512,
+        720
+      ],
+      "id": "b610d589-defb-48f5-85c7-6af9c5ca998d",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "25776611-d22d-45e2-87bb-21027fcfa911",
+              "name": "startRow",
+              "value": 201,
+              "type": "number"
+            },
+            {
+              "id": "5706b0a5-890e-4b26-a90b-d9d4723af024",
+              "name": "endRow",
+              "value": 300,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        496,
+        480
+      ],
+      "id": "0f57d752-3d19-49b9-9d86-5d7185402765",
+      "name": "Select Row/Data Range"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1136,
+        480
+      ],
+      "id": "1d846919-c158-433e-904d-2df5e6e2c6df",
+      "name": "Loop Over"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEETS_DOCUMENT_ID",
+          "mode": "list",
+          "cachedResultName": "Your Sheet Name",
+          "cachedResultUrl": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 0,
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": ""
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "row_number",
+              "lookupValue": "={{ $json.index }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1536,
+        496
+      ],
+      "id": "9f36923b-e4a3-47b7-9ab4-ffd7b8c994ff",
+      "name": "Fetch Data Row",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "12bdf1d8-84cb-4b8a-aca5-b0e1a36a3df7",
+              "leftValue": "={{ $json.email_to_use }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "0b47ef59-20cb-4550-bbca-9fac1eb8a26f",
+              "leftValue": "={{ $json.email_to_use }}",
+              "rightValue": "@",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1840,
+        496
+      ],
+      "id": "94573784-6ba1-4824-8211-3e28276c19a1",
+      "name": "Email Check"
+    },
+    {
+      "parameters": {
+        "operation": "get"
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        2288,
+        688
+      ],
+      "id": "0b14ef46-c92a-4218-870e-ee3bba17226b",
+      "name": "Fetch knowledge base",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "\"Outreach Team\" <your-email@example.com>",
+        "toEmail": "={{ $json.output.to }}",
+        "subject": "={{ $json.output.subject }}",
+        "html": "={{ $json.output.emailBody }}\n\n<!-- below you can add your own signature in HTML format -->\n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        2880,
+        800
+      ],
+      "id": "fa85d5fa-3d40-4acd-abd5-8cba5aa6eef4",
+      "name": "Send email",
+      "webhookId": "",
+      "credentials": {
+        "smtp": {
+          "id": "",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Start Workflow (2nd Step)\nClick this after rows selection to execute flow.",
+        "height": 336,
+        "width": 336
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        32,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "71e5ea26-adf8-4b2c-8c7f-68d40def7f03",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "\n## Row Range (1st Step)\n**Double click** to create range over which complete overflow will run. ",
+        "height": 336,
+        "width": 320,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        384,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "6574e96c-f99c-41ab-8615-c856dab3003c",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Create array list to loop",
+        "height": 336,
+        "width": 288
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        720,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "64daffba-41e2-47a2-aa2b-e3ee2e125751",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Loop over selected data",
+        "height": 336,
+        "width": 368,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1024,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "83f25fa1-2f21-45d3-8508-29dc27b3b816",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Get Business info \n**One Time configuration Required:** check reference doc for details.",
+        "height": 336,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1424,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "6021b9db-9fe3-42b8-9947-5f37d8a56709",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n\n## Get Knowledge base \n**One Time configuration Required:** check reference doc for details.",
+        "height": 336,
+        "width": 304
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2176,
+        672
+      ],
+      "typeVersion": 1,
+      "id": "596eaeec-c5f6-4522-8746-a96a3e3330fa",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## Send Email\n**One Time configuration Required:** check reference doc for details.",
+        "height": 336,
+        "width": 304
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2784,
+        672
+      ],
+      "typeVersion": 1,
+      "id": "a7996016-ab84-48db-8dc6-92f3951f98cf",
+      "name": "Sticky Note6"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Select Row/Data Range",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create array list": {
+      "main": [
+        [
+          {
+            "node": "Loop Over",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select Row/Data Range": {
+      "main": [
+        [
+          {
+            "node": "Create array list",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Fetch Data Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Data Row": {
+      "main": [
+        [
+          {
+            "node": "Email Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Check": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch knowledge base": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send email": {
+      "main": [
+        [
+          {
+            "node": "Loop Over",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": ""
+  },
+  "id": "",
+  "tags": []
+}
